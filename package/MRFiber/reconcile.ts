@@ -209,7 +209,7 @@ const reconcileChildArray = (
 const mapChildren = (fiber: FiberNode | null) => {
   let map = new Map<FiberNode['key'] | FiberNode['index'], FiberNode>()
   while (fiber !== null) {
-    map.set(fiber.key | fiber.index, fiber)
+    map.set(fiber.key || fiber.index, fiber)
     fiber = fiber.sibling
   }
   return map

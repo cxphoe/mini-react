@@ -222,19 +222,44 @@ const findHostSibling = (fiber: FiberNode) => {
 const unmountHostComponent = (fiber: FiberNode) => {
   let parent = findHostParent(fiber)
   let inContainer = parent.stateNode instanceof FiberRootNode
-  let element = fiber.stateNode
+  // let element = fiber.stateNode
   let parentElement = inContainer
     ? (parent.stateNode as FiberRootNode).container
     : (parent.stateNode as HTMLElement)
 
-  if (fiber.tag === FiberTag.HostText || fiber.tag === FiberTag.HostComponent) {
-    if (inContainer) {
-      removeChildFromContainer(parentElement, element)
+  let node: FiberNode | null = fiber
+  let firstHost: FiberNode | null = null
+  while (node) {
+    if (
+      node.tag === FiberTag.HostComponent ||
+      node.tag === FiberTag.HostText
+    ) {
+      if (firstHost) {
+        continue
+      }
+      firstHost = node
+      if (inContainer) {
+        removeChildFromContainer(parentElement, node.stateNode)
+      } else {
+        removeChild(parentElement, node.stateNode)
+      }
     } else {
-      removeChild(parentElement, element)
+      commitUnmount(node)
     }
-  } else {
-    commitUnmount(fiber)
+
+    if (node.child) {
+      node = node.child
+    } else if (node === fiber) {
+      return
+    } else {
+      while (node.sibling === null) {
+        if (node.return === null || node.return === fiber) {
+          return
+        }
+        node = node.return
+      }
+      node = node.sibling
+    }
   }
 }
 
