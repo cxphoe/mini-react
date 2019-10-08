@@ -36,8 +36,7 @@ declare namespace MR {
   }
 
   interface ComponentLifecycle<P, S, SS = any>
-    extends NewLifecycle<P, S, SS>,
-      DeprecatedLifecycle<P, S> {
+    extends NewLifecycle<P, S, SS> {
     /**
      * Called immediately after a component is mounted. Setting state here will trigger re-rendering.
      */
@@ -68,18 +67,18 @@ declare namespace MR {
      * Catches exceptions generated in descendant components. Unhandled exceptions will cause
      * the entire component tree to unmount.
      */
-    componentDidCatch?(error: Error, errorInfo: ErrorInfo): void;
+    componentDidCatch?(error: Error, errorInfo: any): void;
   }
 
   interface StaticLifecycle<P, S> {
-    getDerivedStateFromProps?: GetDerivedStateFromProps<P, S>;
-    getDerivedStateFromError?: GetDerivedStateFromError<P, S>;
+    getDerivedStateFromProps?: React.GetDerivedStateFromProps<P, S>;
+    getDerivedStateFromError?: React.GetDerivedStateFromError<P, S>;
   }
 
   interface Component<P = {}, S = {}> extends ComponentLifecycle<P, S> {}
 
   class Component<P, S> {
-    static contextType?: Context<any>;
+    static contextType?: any;
     static isClassComponent?: boolean;
 
     context: any;
@@ -116,7 +115,7 @@ declare namespace MR {
     state: Readonly<S>;
   }
 
-  interface ComponentClass<P = {}, S = ComponentState>
+  interface ComponentClass<P = {}, S = {}>
     extends StaticLifecycle<P, S> {
     new (props: P, context?: any): Component<P, S>;
     // propTypes?: WeakValidationMap<P>;

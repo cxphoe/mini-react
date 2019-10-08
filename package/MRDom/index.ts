@@ -4,35 +4,46 @@ const validChildren = (children: any) => {
   return !(children === undefined || children === null || typeof children === 'boolean')
 }
 
-const Element = <P, T extends MR.HTMLTags | MR.FunctionComponent<P> | MR.ComponentClass<P>>(
+// component
+function Element(
+  type: MR.HTMLTags,
+  props: MR.HTMLElementProps,
+  ...children: MR.MRNode[]
+): MR.MRElement
+function Element<P>(
+  type: MR.ComponentClass<P> | MR.FunctionComponent<P>,
+  props: { key?: string | number } & P | null,
+  ...children: MR.MRNode[]
+): MR.MRElement
+function Element<P, T extends MR.HTMLTags | MR.FunctionComponent<P> | MR.ComponentClass<P>>(
   type: T,
-  props: T extends MR.HTMLTags ? MR.HTMLElementProps : P,
-  children: MR.MRNode | MR.MRNode[],
-): MR.MRElement => {
-  let key = (props as any).key
-  if (key === undefined) {
-    key = null
-  }
-  if (Array.isArray(children)) {
-    children = children.filter(validChildren)
-    if (children.length === 0) {
-      children = undefined
-    }
-  }
-  if (validChildren(children)) {
-    props = {
-      ...props,
-      children,
+  props: any,
+  ...children: MR.MRNode[]
+): MR.MRElement {
+
+  let key = null
+  if (props !== null) {
+    props = { ...props }
+    if (props.key !== undefined) {
+      key = props.key
     }
   }
 
-  return {
+  children = children.filter(validChildren)
+  if (children.length > 0) {
+    if (props === null || props === undefined) {
+      props = { children }
+    } else {
+      props.children = children
+    }
+  }
+
+  let result = {
     key,
     type,
-    props: {
-      ...props,
-    },
+    props,
   }
+  return result
 }
 
 const render = (

@@ -2,7 +2,6 @@ import { FiberNode, createFiberFromElement, createFiberFromText, createWorkInPro
 import { EffectTag, FiberTag } from './tag'
 import { enqueueEffect } from './effect'
 
-
 let shouldTrackSideEffects = false
 let dummyFiber = createFiber(0, null)
 

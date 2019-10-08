@@ -46,7 +46,7 @@ class Component<P = {}, S = {}> implements MR.Component<P, S> {
 
   }
 
-  render() {
+  render(): MR.MRNode {
     return null
   }
 }
