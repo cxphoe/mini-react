@@ -2,6 +2,8 @@
 
 > 基于 React Fiber 的实现
 
+代码示例：https://codesandbox.io/s/mreact-f3rfo
+
 ## Features
 
 - [x] vnode 实现（React.createElement 实现)
