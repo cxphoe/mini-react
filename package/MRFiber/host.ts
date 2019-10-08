@@ -234,14 +234,13 @@ const unmountHostComponent = (fiber: FiberNode) => {
       node.tag === FiberTag.HostComponent ||
       node.tag === FiberTag.HostText
     ) {
-      if (firstHost) {
-        continue
-      }
-      firstHost = node
-      if (inContainer) {
-        removeChildFromContainer(parentElement, node.stateNode)
-      } else {
-        removeChild(parentElement, node.stateNode)
+      if (!firstHost) {
+        firstHost = node
+        if (inContainer) {
+          removeChildFromContainer(parentElement, node.stateNode)
+        } else {
+          removeChild(parentElement, node.stateNode)
+        }
       }
     } else {
       commitUnmount(node)
