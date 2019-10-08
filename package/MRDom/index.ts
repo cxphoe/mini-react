@@ -31,10 +31,11 @@ function Element<P, T extends MR.HTMLTags | MR.FunctionComponent<P> | MR.Compone
 
   children = children.filter(validChildren)
   if (children.length > 0) {
+    let _children: any = children.length === 1 ? children[0] : children
     if (props === null || props === undefined) {
-      props = { children }
+      props = { children: _children }
     } else {
-      props.children = children
+      props.children = _children
     }
   }
 
