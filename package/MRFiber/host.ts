@@ -1,6 +1,6 @@
 import { FiberNode } from './fiber'
 import { markUpdate, markContentReset, FiberTag, EffectTag } from './tag'
-import { registrationNameModules } from './events'
+import { registrationNameModules, ensureListeningTo } from './events'
 import { reconcileChildren } from './reconcile'
 import { FiberRootNode } from './fiberRoot'
 import { removeChildFromContainer, removeChild } from './dom'
@@ -340,7 +340,7 @@ const diffProperties = (domElement: HTMLElement, type: MR.HTMLTags, oldProps: an
         updatePayload.push(CHILDREN, '' + newProp)
       }
     } else if (registrationNameModules[key]) {
-      // TODO: 事件处理
+      ensureListeningTo(key)
     } else {
       updatePayload.push(key, newProp)
     }
@@ -371,7 +371,7 @@ const updateInstanceProps = (domElement: HTMLElement, props: any): void => {
   (domElement as any)[internalEventHandlersKey] = props
 }
 
-const getInstanceProps = (domElement: HTMLElement): FiberNode => {
+const getInstanceProps = (domElement: HTMLElement): MR.HTMLElementProps => {
   return (domElement as any)[internalEventHandlersKey]
 }
 
@@ -422,6 +422,8 @@ const setInitialDomProperties = (
       if (typeof prop === 'string' || typeof prop === 'number') {
         setTextContent(domElement, '' + prop)
       }
+    } else if (registrationNameModules[key]) {
+      ensureListeningTo(key)
     } else {
       domElement.setAttribute(key, prop)
     }

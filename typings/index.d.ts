@@ -9,6 +9,8 @@ declare namespace MR {
   type HTMLTags = keyof React.ReactHTML
   type HTMLElementProps = React.AllHTMLAttributes<HTMLElement>
   type MRNode = string | number | boolean | undefined | null | MRElement
+  type SyntheticEvent = React.SyntheticEvent
+  type EventHandler = React.EventHandler
 
   interface NewLifecycle<P, S, SS> {
     /**

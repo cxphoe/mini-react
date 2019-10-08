@@ -1,6 +1,7 @@
 import { FiberNode } from '../MRFiber/fiber'
 import { getFiberRoot, FiberRootNode } from '../MRFiber/fiberRoot'
 import { renderRoot } from '../MRFiber/work'
+import { isIdleContext } from '../MRFiber/executionContext'
 
 export const NoWork = 0
 export const Sync = 1
@@ -37,7 +38,9 @@ const scheduleWork = (fiber: FiberNode, expirationTime: number) => {
   let root = getFiberRoot(fiber)
   if (expirationTime === Sync) {
     scheduleCallbackForRoot(root, expirationTime)
-    flushSyncCallbackQueue()
+    if (isIdleContext()) {
+      flushSyncCallbackQueue()
+    }
   }
 }
 
