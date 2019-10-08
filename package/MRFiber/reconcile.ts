@@ -113,6 +113,14 @@ const reconcileChildArray = (
   currentChild: FiberNode | null,
   nextChildren: MR.MRNode[],
 ) => {
+  // 这里的操作涉及到 diff 策略
+  // 会根据 key / index 来决定元素是否可以复用（判断旧节点的 key 与 elementType 跟新元素是否相同）。这里对节点的
+  // 操作共有三种：
+  //   1. 移动：在操作的过程中，会维持一个表示当前已经复用过的旧节点的最大 index（lastIndex)。在遍历新子元素，生成
+  //           新节点数组的过程，会判断是否有旧节点可以复用，如果在复用旧节点的时候，发现这个旧节点的 index 小于这
+  //           个 lastIndex，说明是要把这个旧节点移动到lastIndex 表示的节点之后，需要做移动处理
+  //   2. 插入：如果新元素在旧节点数组中没有发现 key 相同且 elementType 相同的节点，就说明是新节点，做插入处理
+  //   3. 删除：新元素数组处理完之后，没有复用到的旧节点就做删除处理
 
   dummyFiber.sibling = null
   /** reconcile 的结果 */
@@ -121,7 +129,11 @@ const reconcileChildArray = (
   let prevNewFiber: FiberNode = dummyFiber
   /** 已存在的节点 */
   let oldFiber: FiberNode | null = currentChild
-  /** 上一个旧节点的 index */
+  /**
+   * 上一个旧节点的 index，用来判断当前复用的节点是否原来是位于 lastPlacedIndex 表示的节点之前的。
+   * 如果是，就说明需要对节点中的 dom 元素进行移动（实际上只要对节点标识 Placement 中然后把元素添加到
+   * lastPlacedIndex 中就行了）
+   */
   let lastPlacedIndex = 0
   /** 新节点的 index */
   let newIdx = 0
@@ -129,7 +141,9 @@ const reconcileChildArray = (
 
   for (; oldFiber !== null && newIdx < nextChildren.length; newIdx++) {
     if (oldFiber.index > newIdx) {
+      // 说明有节点被删除，这里需要判断是否可以插入
       nextOldFiber = oldFiber
+      // oldFiber 置空，表示当前没有元素比较
       oldFiber = null
     } else {
       nextOldFiber = oldFiber.sibling
@@ -233,7 +247,7 @@ const updateFromMap = (
 }
 
 /**
- * 只在 key 相同的情况下，返回可复用的节点
+ * 只在 key 以及 elementType 相同的情况下，返回可复用的节点
  */
 const updateSlot = (
   parentFiber: FiberNode,
@@ -349,7 +363,7 @@ const placeChild = (newFiber: FiberNode, lastIndex: number, newIndex: number) =>
   let current = newFiber.alternate
   if (
     current === null || // 插入
-    current.index < lastIndex // 移动
+    current.index < lastIndex // 当前旧节点的 index 小于记录到的最大的旧节点的 index，需要移动
   ) {
     newFiber.effectTag = EffectTag.Placement
     return lastIndex
