@@ -227,6 +227,61 @@ const SyntheticKeyboardEvent = SyntheticEvent.extend({
   },
 })
 
+let previousScreenX = 0
+let previousScreenY = 0
+
+let isMovementXSet = false
+let isMovementYSet = false
+
+const SyntheticMouseEvent = SyntheticEvent.extend({
+  screenX: null,
+  screenY: null,
+  clientX: null,
+  clientY: null,
+  pageX: null,
+  pageY: null,
+  ctrlKey: null,
+  shiftKey: null,
+  altKey: null,
+  metaKey: null,
+  // getModifierState: getEventModifierState,
+  button: null,
+  buttons: null,
+  relatedTarget: (event: any) => {
+    return event.relatedTarget || (event.fromElement === event.srcElement ? event.toElement : event.fromElement)
+  },
+  movementX: (event: any) => {
+    if ('movementX' in event) {
+      return event.movementX
+    }
+
+    let screenX = previousScreenX
+    previousScreenX = event.screenX
+
+    if (!isMovementXSet) {
+      isMovementXSet = true
+      return 0
+    }
+
+    return event.type === 'mousemove' ? event.screenX - screenX : 0
+  },
+  movementY: (event: any) => {
+    if ('movementY' in event) {
+      return event.movementY
+    }
+
+    let screenY = previousScreenY
+    previousScreenY = event.screenY
+
+    if (!isMovementYSet) {
+      isMovementYSet = true
+      return 0
+    }
+
+    return event.type === 'mousemove' ? event.screenY - screenY : 0
+  },
+})
+
 const capitialize = (str: string) => {
   return str[0].toUpperCase() + str.slice(1)
 }
@@ -250,6 +305,8 @@ let events: [string, typeof SyntheticEvent][] = [
   ['keyDown', SyntheticKeyboardEvent],
   ['keyUp', SyntheticKeyboardEvent],
   ['keyPress', SyntheticKeyboardEvent],
+  ['mouseOver', SyntheticMouseEvent],
+  ['mouseOut', SyntheticMouseEvent],
 ]
 
 for (let [eventName, EventCtor] of events) {
