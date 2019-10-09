@@ -16,6 +16,16 @@ const COMMENT_NODE = 8
 const DOCUMENT_NODE = 9
 const DOCUMENT_FRAGMENT_NODE = 11
 
+const HostProperties: {
+  [key: string]: string;
+} = {}
+let attrConfigs = [
+  ['className', 'class'],
+]
+for (let [hostAttr, actualAttr] of attrConfigs) {
+  HostProperties[hostAttr] = actualAttr
+}
+
 function shouldSetTextContent(type: MR.HTMLTags, props: any) {
   return type === 'textarea' ||
     type === 'option' ||
@@ -191,7 +201,7 @@ const findFirstHost = (fiber: FiberNode, placed?: boolean) => {
       node = node.child
     } else {
       while (node.sibling === null) {
-        if (node.return === null || node.return === fiber) {
+        if (node.return === null || node.return === fiber || node === fiber) {
           return null
         }
         node = node.return
@@ -285,7 +295,6 @@ const diffProperties = (domElement: HTMLElement, type: MR.HTMLTags, oldProps: an
         styleUpdates[styleName] = ''
       }
     } else if (key === DANGEROUSLY_SET_INNER_HTML) {
-      updatePayload.push('innerHTML', '')
     } else if (registrationNameModules[key]) {
     } else {
       updatePayload.push(key, null)
@@ -333,7 +342,7 @@ const diffProperties = (domElement: HTMLElement, type: MR.HTMLTags, oldProps: an
       let nextHtml = newProp ? newProp.__html : undefined
       let lastHtml = oldProp ? oldProp.__html : undefined
       if (nextHtml !== null && nextHtml !== lastHtml) {
-        updatePayload.push('innerHTML', '' + nextHtml)
+        updatePayload.push(key, '' + nextHtml)
       }
     } else if (key === CHILDREN) {
       if (oldProp !== newProp && (typeof newProp === 'number' || typeof newProp === 'string')) {
@@ -416,7 +425,7 @@ const setInitialDomProperties = (
     if (key === STYLE) {
       setValueForStyles(domElement, prop)
     } else if (key === DANGEROUSLY_SET_INNER_HTML) {
-      let html = prop ? props.__html : undefined
+      let html = prop ? prop.__html : undefined
       domElement.innerHTML = html || ''
     } else if (key === CHILDREN) {
       if (typeof prop === 'string' || typeof prop === 'number') {
@@ -425,7 +434,7 @@ const setInitialDomProperties = (
     } else if (registrationNameModules[key]) {
       ensureListeningTo(key)
     } else {
-      domElement.setAttribute(key, prop)
+      setValueForProperty(domElement, key, prop)
     }
   }
 }
@@ -442,9 +451,14 @@ const updateDOMProperties = (domElement: HTMLElement, updatePayload: any[]) => {
     } else if (propKey === CHILDREN) {
       setTextContent(domElement, propValue)
     } else {
-      domElement.setAttribute(propKey, propValue)
+      setValueForProperty(domElement, propKey, propValue)
     }
   }
+}
+
+const setValueForProperty = (node: HTMLElement, prop: string, value: any) => {
+  prop = HostProperties[prop] || prop
+  node.setAttribute(prop, value)
 }
 
 const setValueForStyles = (node: HTMLElement, styles: any) => {
