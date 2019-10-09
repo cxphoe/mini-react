@@ -10,11 +10,11 @@ export interface Todo {
 
 export type OnTodoChange = (todo: Todo, payload: Partial<Todo> | null) => void;
 
-const createTodo = (content: string): Todo => {
+const createTodo = (content: string, completed: boolean = false): Todo => {
   return {
     content,
     id: content,
-    completed: false,
+    completed,
   }
 }
 
@@ -23,9 +23,10 @@ export default class App extends Component<{}, {
 }> {
   state = {
     todoItems: [
-      createTodo('todo1'),
-      createTodo('todo2'),
-      createTodo('todo3'),
+      createTodo('ClassComponent lifeStyles', true),
+      createTodo('ClassComponent setState', true),
+      createTodo('FunctionComponent'),
+      createTodo('Hooks'),
     ],
   };
 

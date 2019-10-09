@@ -2,7 +2,7 @@
 
 > 基于 React Fiber 的实现
 
-代码示例：https://codesandbox.io/s/mreact-f3rfo
+代码示例：https://codesandbox.io/s/github/cxphoe/mini-react
 
 ## Features
 
