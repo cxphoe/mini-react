@@ -9,17 +9,14 @@ class TodoList extends Component<{
   onTodoAdd: (content: string) => void;
   onTodoChange: OnTodoChange;
 }, {
-  editingTodoId?: number | string,
+  editingTodoId?: number,
 }> {
 
   onTodoContent = (value: string) => {
     if (value) {
       let todoId = this.state.editingTodoId!
-      let { onTodoChange, items } = this.props
-      let todo = items.find((item) => item.id === todoId)
-      if (todo) {
-        onTodoChange(todo, { content: value })
-      }
+      let { onTodoChange } = this.props
+      onTodoChange(todoId, { content: value })
     }
     this.setState({
       editingTodoId: -1,
@@ -43,7 +40,7 @@ class TodoList extends Component<{
     this.props.onTodoChange(todo, payload)
   }
 
-  onShowInput = (index: number | string) => {
+  onShowInput = (index: number) => {
     this.setState({
       editingTodoId: index,
     })

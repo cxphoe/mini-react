@@ -18,6 +18,7 @@ export const EffectTag = {
   ContentReset:         0b00100000,
   PlacementAndUpdate:   0b00000110,
   Snapshot:             0b01000000,
+  Passive:              0b10000000,
 }
 
 export const UpdateTag = {

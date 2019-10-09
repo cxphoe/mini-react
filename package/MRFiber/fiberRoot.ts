@@ -31,7 +31,7 @@ const createFiberRoot = (container: HTMLElement) => {
 }
 
 const createHostRootFiber = () => {
-  return createFiber(FiberTag.HostRoot, null)
+  return createFiber(FiberTag.HostRoot, null, null)
 }
 
 const getFiberRoot = (fiber: FiberNode) => {

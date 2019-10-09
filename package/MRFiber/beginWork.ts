@@ -12,6 +12,10 @@ const hasReceivedUpdate = () => {
   return didReceiveUpdate
 }
 
+const markReceivedUpdate = () => {
+  didReceiveUpdate = true
+}
+
 const beginWork = (
   current: FiberNode | null,
   workInProgress: FiberNode,
@@ -106,4 +110,5 @@ export {
   beginWork,
   reuseAlreadyFinishedWork,
   hasReceivedUpdate,
+  markReceivedUpdate,
 }

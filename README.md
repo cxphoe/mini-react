@@ -25,8 +25,8 @@
     - [x] 同步更新 (异步回调中的处理)
 - [ ] 函数组件
   - [ ] hook
-    - [ ] useState
-    - [ ] useReducer
+    - [x] useState
+    - [x] useReducer
     - [ ] useEffect
 - [ ] 调度
 

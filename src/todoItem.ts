@@ -5,7 +5,7 @@ import { Todo, OnTodoChange } from './app'
 const TodoItem: MR.FunctionComponent<{
   todo: Todo;
   onTodoChange: OnTodoChange;
-  onShowInput: (index: number | string) => void;
+  onShowInput: (index: number) => void;
 }> = (props) => {
   let {
     todo,
@@ -14,11 +14,11 @@ const TodoItem: MR.FunctionComponent<{
   } = props
 
   const onCompleteToggle = () => {
-    onTodoChange(todo, { completed: !todo.completed })
+    onTodoChange(todo.id, { completed: !todo.completed })
   }
 
   const onDelete = () => {
-    onTodoChange(todo, null)
+    onTodoChange(todo.id, null)
   }
 
   const onShowInput = () => {

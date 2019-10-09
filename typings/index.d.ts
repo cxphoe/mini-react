@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch } from 'react'
 
 export = MR;
 export as namespace MR;
@@ -135,4 +135,29 @@ declare namespace MR {
     type: HTMLTags | FunctionComponent<any> | ComponentClass<any>;
     props: any;
   }
+
+
+  /** hook */
+  type HookReducer<S, A> = (state: S, action: A) => S;
+  interface HookQueue<S = {}, A = {}> {
+    last: HookUpdate<A> | null;
+    dispatch: ((action: A) => void) | null;
+    lastRenderedReducer: HookReducer<S, A>;
+    lastRenderedState: S;
+  }
+  interface Hook<S = {}, A = {}> {
+    memoizedState: S | null;
+    baseState: S | null;
+    queue: HookQueue<S, A> | null;
+    baseUpdate: HookUpdate<A> | null;
+    next: Hook<S, A> | null;
+  }
+  interface HookUpdate<A = {}> {
+    next: HookUpdate<A> | null;
+    action: A;
+  }
+  type Dispatch<A> = (action: A) => void;
+
+  type useState<S> = (inititalState: S | (() => S)) => [S, Dispatch<S>]
+  type useReducer<S, A>= (reducer: HookReducer<S, A>, initialState: S) => [S, Dispatch<A>]
 }
