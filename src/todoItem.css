@@ -1,0 +1,74 @@
+.todo-list .todo-item {
+  list-style: none;
+  padding: 0px 15px 0px 60px;
+  font-size: 24px;
+  line-height: 1.2;
+  position: relative;
+  transition: color .3s;
+  height: 62px;
+  line-height: 62px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+
+.todo-item .rsfont {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  line-height: 30px;
+  position: absolute;
+  left: 8px;
+  cursor: pointer;
+  color: #16c2c2;
+  user-select: none;
+}
+
+
+.todo-item .destroy {
+  position: absolute;
+  right: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  color: #cc9a9a;
+  display: none;
+}
+
+.todo-item:hover .destroy {
+  display: inline-block;
+  user-select: none;
+  font-size: 32px;
+  top: 18px;
+  font-weight: 200;
+}
+
+.todo-item.completed {
+  color: #cdcdcd;
+  text-decoration: line-through;
+}
+
+.todo-item input {
+  height: 60px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ddd;
+  outline: none;
+  position: relative;
+  z-index: 10;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0 16px;
+  box-shadow:
+    inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.todo-item .content {
+  display: inline-block;
+  width: 100%;
+}

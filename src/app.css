@@ -1,0 +1,11 @@
+#app {
+  width: 550px;
+  margin: auto;
+}
+
+#app p {
+  text-align: center;
+  font-size: 48px;
+  color: #b83f45;
+  font-weight: 200;
+}

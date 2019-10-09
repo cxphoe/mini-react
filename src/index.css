@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'rsfont';  /* project id 1412786 */
+  src: url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.eot');
+  src: url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1412786_mj1yi5vaa3m.svg#rsfont') format('svg');
+}
+
+.rsfont {
+  font-family: rsfont !important;
+  font-style:normal;
+  -webkit-font-smoothing:antialiased;
+}
+
+html {
+  background: #f1f2f3;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
