@@ -4,10 +4,18 @@ const validChildren = (children: any) => {
   return !(children === undefined || children === null || typeof children === 'boolean')
 }
 
+const render = (
+  element: MR.MRElement,
+  container: HTMLElement,
+  callback?: () => void,
+) => {
+  updateContainer(container, element, callback)
+}
+
 // component
 function Element(
   type: MR.HTMLTags,
-  props: MR.HTMLElementProps,
+  props: MR.HTMLElementProps | null,
   ...children: MR.MRNode[]
 ): MR.MRElement
 function Element<P>(
@@ -27,6 +35,7 @@ function Element<P, T extends MR.HTMLTags | MR.FunctionComponent<P> | MR.Compone
     if (props.key !== undefined) {
       key = props.key
     }
+    delete props.key
   }
 
   children = children.filter(validChildren)
@@ -45,14 +54,6 @@ function Element<P, T extends MR.HTMLTags | MR.FunctionComponent<P> | MR.Compone
     props,
   }
   return result
-}
-
-const render = (
-  element: MR.MRElement,
-  container: HTMLElement,
-  callback?: () => void,
-) => {
-  updateContainer(container, element, callback)
 }
 
 export {
