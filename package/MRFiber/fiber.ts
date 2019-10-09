@@ -33,15 +33,8 @@ export interface FiberNode {
 const createFiber = (
   tag: number,
   pendingProps: any,
+  key: string | number | null,
 ): FiberNode => {
-  let key = null
-  if (pendingProps && typeof pendingProps === 'object') {
-    key = pendingProps.key
-    delete pendingProps.key
-    if (key === undefined) {
-      key = null
-    }
-  }
 
   return {
     elementType: null,
@@ -90,20 +83,20 @@ const createFiberFromElement = (element: MR.MRElement): FiberNode => {
     tag = FiberTag.FunctionComponent
   }
 
-  let fiber = createFiber(tag, element.props)
+  let fiber = createFiber(tag, element.props, element.key)
   fiber.elementType = type
   return fiber
 }
 
 const createFiberFromText = (text: number | string): FiberNode => {
-  let fiber = createFiber(FiberTag.HostText, text)
+  let fiber = createFiber(FiberTag.HostText, text, null)
   return fiber
 }
 
 const createWorkInProgress = (fiber: FiberNode, pendingProps: any): FiberNode => {
   let workInProgress = fiber.alternate
   if (workInProgress === null) {
-    workInProgress = createFiber(fiber.tag, pendingProps)
+    workInProgress = createFiber(fiber.tag, pendingProps, fiber.key)
     workInProgress.elementType = fiber.elementType
     workInProgress.stateNode = fiber.stateNode
     // workInProgress.return = fiber.return
