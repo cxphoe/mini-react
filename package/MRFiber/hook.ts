@@ -1,0 +1,5 @@
+const renderWithHooks = () => {}
+
+export {
+  renderWithHooks,
+}

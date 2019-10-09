@@ -4,8 +4,13 @@ import { FiberTag } from './tag'
 import { updateHostComponent } from './host'
 import { updateClassComponent } from './classComponent'
 import { updateHostRoot } from './hostRoot'
+import { updateFunctionComponent } from './fcComponent'
 
 let didReceiveUpdate = false
+
+const hasReceivedUpdate = () => {
+  return didReceiveUpdate
+}
 
 const beginWork = (
   current: FiberNode | null,
@@ -48,6 +53,11 @@ const beginWork = (
       let ctor = workInProgress.elementType as MR.ComponentClass
       let nextProps = workInProgress.pendingProps
       return updateClassComponent(current, workInProgress, ctor, nextProps, renderExpirationTime)
+    }
+    case FiberTag.FunctionComponent: {
+      let Component = workInProgress.elementType as MR.FunctionComponent
+      let nextProps = workInProgress.pendingProps
+      return updateFunctionComponent(current, workInProgress, Component, nextProps, renderExpirationTime)
     }
   }
 
@@ -95,4 +105,5 @@ const cloneChildFibers = (current: FiberNode | null, workInProgress: FiberNode) 
 export {
   beginWork,
   reuseAlreadyFinishedWork,
+  hasReceivedUpdate,
 }

@@ -1,53 +1,53 @@
 import './todoItem.css'
-import { Component, Element } from '../package/index'
+import { Element } from '../package/index'
 import { Todo, OnTodoChange } from './app'
 
-export default class TodoItem extends Component<{
+const TodoItem: MR.FunctionComponent<{
   todo: Todo;
-  index: number;
   onTodoChange: OnTodoChange;
-  onShowInput: (index: number) => void;
-}> {
+  onShowInput: (index: number | string) => void;
+}> = (props) => {
+  let {
+    todo,
+    onTodoChange,
+    onShowInput: inShowInput,
+  } = props
 
-  onCompleteToggle = () => {
-    let { todo, onTodoChange } = this.props
+  const onCompleteToggle = () => {
     onTodoChange(todo, { completed: !todo.completed })
   }
 
-  onDelete = () => {
-    let { todo, onTodoChange } = this.props
+  const onDelete = () => {
     onTodoChange(todo, null)
   }
 
-  onShowInput = () => {
-    this.props.onShowInput(this.props.index)
+  const onShowInput = () => {
+    inShowInput(todo.id)
   }
 
-  render() {
-    let { todo } = this.props
-
-    return Element(
-      'li',
-      { className: `todo-item ${todo.completed ? 'completed' : ''}` },
-      Element(
-        'span',
-        {
-          dangerouslySetInnerHTML: { __html: todo.completed ? '&#xe605;' : '' },
-          className: 'rsfont',
-          onClick: this.onCompleteToggle,
-        },
-      ),
-      // todo.content,
-      Element(
-        'span',
-        { onClick: this.onShowInput, className: 'content' },
-        todo.content,
-      ),
-      Element(
-        'label',
-        { className: 'destroy', onClick: this.onDelete },
-        '×',
-      ),
-    )
-  }
+  return Element(
+    'li',
+    { className: `todo-item ${todo.completed ? 'completed' : ''}` },
+    Element(
+      'span',
+      {
+        dangerouslySetInnerHTML: { __html: todo.completed ? '&#xe605;' : '' },
+        className: 'rsfont',
+        onClick: onCompleteToggle,
+      },
+    ),
+    // todo.content,
+    Element(
+      'span',
+      { onClick: onShowInput, className: 'content' },
+      todo.content,
+    ),
+    Element(
+      'label',
+      { className: 'destroy', onClick: onDelete },
+      '×',
+    ),
+  )
 }
+
+export default TodoItem

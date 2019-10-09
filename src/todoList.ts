@@ -9,18 +9,20 @@ class TodoList extends Component<{
   onTodoAdd: (content: string) => void;
   onTodoChange: OnTodoChange;
 }, {
-  editingTodoIndex?: number,
+  editingTodoId?: number | string,
 }> {
 
   onTodoContent = (value: string) => {
     if (value) {
-      let todoIndex = this.state.editingTodoIndex!
+      let todoId = this.state.editingTodoId!
       let { onTodoChange, items } = this.props
-      let todo = items[todoIndex]
-      onTodoChange(todo, { content: value })
+      let todo = items.find((item) => item.id === todoId)
+      if (todo) {
+        onTodoChange(todo, { content: value })
+      }
     }
     this.setState({
-      editingTodoIndex: -1,
+      editingTodoId: -1,
     })
   }
 
@@ -41,9 +43,9 @@ class TodoList extends Component<{
     this.props.onTodoChange(todo, payload)
   }
 
-  onShowInput = (index: number) => {
+  onShowInput = (index: number | string) => {
     this.setState({
-      editingTodoIndex: index,
+      editingTodoId: index,
     })
   }
 
@@ -53,10 +55,10 @@ class TodoList extends Component<{
       target.parentElement &&
       target.parentElement.classList.contains('todo-item')
     let isTodoEditInput = target.parentElement && target.parentElement.classList.contains('todo-edit-input')
-    let resetIndex = !isTodoItem && !isTodoEditInput
-    if (resetIndex) {
+    let resetRecord = !isTodoItem && !isTodoEditInput
+    if (resetRecord) {
       this.setState({
-        editingTodoIndex: -1,
+        editingTodoId: -1,
       })
     }
   }
@@ -89,8 +91,8 @@ class TodoList extends Component<{
       Element(
         'ul',
         { className: 'todo-list' },
-        ...items.map((item, index) =>
-          this.state.editingTodoIndex === index
+        ...items.map((item) =>
+          this.state.editingTodoId === item.id
           ? Element(
             TodoEditInput,
             {
@@ -101,7 +103,6 @@ class TodoList extends Component<{
           : Element(
             TodoItem,
             {
-              index,
               key: item.id,
               todo: item,
               onTodoChange: this.onTodoChange,

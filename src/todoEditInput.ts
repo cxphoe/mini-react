@@ -1,30 +1,30 @@
-import { Component, Element } from '../package/index'
+import { Element } from '../package/index'
 import './todoEditInput.css'
 
-export default class TodoEditInput extends Component<{
+const TodoEditInput: MR.FunctionComponent<{
   value: string;
   onInput: (content: string) => void;
-}> {
+}> = (props) => {
 
-  onKeyDown = (event: any) => {
+  const onKeyDown = (event: any) => {
     if (event.keyCode === 13) {
       let value = event.currentTarget.value.trim()
-      this.props.onInput(value)
+      props.onInput(value)
     }
   }
 
-  render() {
-    return Element(
-      'div',
-      { className: 'todo-edit-input' },
-      Element(
-        'input',
-        {
-          value: this.props.value,
-          onKeyDown: this.onKeyDown,
-          autoFocus: true,
-        },
-      ),
-    )
-  }
+  return Element(
+    'div',
+    { className: 'todo-edit-input' },
+    Element(
+      'input',
+      {
+        value: props.value,
+        onKeyDown,
+        autoFocus: true,
+      },
+    ),
+  )
 }
+
+export default TodoEditInput

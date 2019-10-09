@@ -4,7 +4,9 @@ export = MR;
 export as namespace MR;
 
 declare namespace MR {
-  type FunctionComponent<P = {}> = (props?: P) => MRNode;
+  type FunctionComponent<P = {}> = (props: P & {
+    children?: MRNode;
+  }) => MRNode;
 
   type HTMLTags = keyof React.ReactHTML
   type HTMLElementProps = React.AllHTMLAttributes<HTMLElement>

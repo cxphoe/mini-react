@@ -3,7 +3,7 @@ import { Component, Element } from '../package/index'
 import TodoList from './todoList'
 
 export interface Todo {
-  id: string;
+  id: string | number;
   content: string;
   completed: boolean;
 }
@@ -13,7 +13,7 @@ export type OnTodoChange = (todo: Todo, payload: Partial<Todo> | null) => void;
 const createTodo = (content: string, completed: boolean = false): Todo => {
   return {
     content,
-    id: content,
+    id: Math.random(),
     completed,
   }
 }
