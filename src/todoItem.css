@@ -1,12 +1,10 @@
 .todo-list .todo-item {
   list-style: none;
-  padding: 0px 15px 0px 60px;
+  padding: 15px 30px 15px 60px;
   font-size: 24px;
   line-height: 1.2;
   position: relative;
   transition: color .3s;
-  height: 62px;
-  line-height: 62px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -32,19 +30,20 @@
 
 .todo-item .destroy {
   position: absolute;
-  right: 20px;
   line-height: 20px;
   cursor: pointer;
   color: #cc9a9a;
   display: none;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  right: 12px;
+  font-size: 32px;
+  font-weight: 200;
 }
 
 .todo-item:hover .destroy {
   display: inline-block;
   user-select: none;
-  font-size: 32px;
-  top: 18px;
-  font-weight: 200;
 }
 
 .todo-item.completed {
